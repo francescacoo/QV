@@ -16,7 +16,7 @@ export class Tab1Page {
   databaseObj: SQLiteObject; // Database instance object
   name_model:string = ""; // Input field model
   row_data: any = []; // Table rows
-  readonly database_name:string = "QV.db"; // DB name
+  readonly database_name:string = 'QV.db'; // DB name
   readonly table_name:string = "pufflog"; // Table name
   tot_puffs =0;
   total_day_puffs =0;
@@ -42,7 +42,7 @@ export class Tab1Page {
         alert('Database'+this.database_name + ' Created!');
       })
       .catch(e => {
-        alert("error " + JSON.stringify(e))
+        alert("error " + JSON.stringify(e));
       });
   }
 
@@ -53,7 +53,7 @@ export class Tab1Page {
         alert('Table Created!');
       })
       .catch(e => {
-        alert('error ' + JSON.stringify(e))
+        alert('error ' + JSON.stringify(e));
       });
   }
 
@@ -74,7 +74,7 @@ export class Tab1Page {
       alert('Enter Name');
       return;
     }
-    this.databaseObj.executeSql('INSERT INTO ' + this.table_name + ' (puufn) VALUES ("' + this.name_model + '")', [])
+    this.databaseObj.executeSql('INSERT INTO ' + this.table_name + ' (puffn) VALUES ("' + this.name_model + '")', [])
       .then(() => {
         alert('Row Inserted!');
         this.getPuffs();
@@ -119,7 +119,7 @@ export class Tab1Page {
         }
       })
       .catch(e => {
-        alert("error " + JSON.stringify(e))
+        alert('error ' + JSON.stringify(e))
       });
   }
 
