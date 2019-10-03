@@ -18,8 +18,11 @@ export class Tab1Page {
   row_data: any = []; // Table rows
   readonly database_name:string = 'QV.db'; // DB name
   readonly table_name:string = "pufflog"; // Table name
-  tot_puffs =0;
-  total_day_puffs =0;
+  tot_puffs: number;
+  total_day_puffs: number;
+
+  today = Date.now();
+  lastLoggedDay: any;
 
   constructor(
     private platform: Platform,
@@ -27,9 +30,16 @@ export class Tab1Page {
   ) {
     this.platform.ready().then(() => {
       this.createDB();
+    }).then(()=>{
+      this.getPuffs();
+
     }).catch(error => {
       console.log(error);
-    })
+    });
+
+
+
+
   }
 
   createDB() {
@@ -39,11 +49,12 @@ export class Tab1Page {
     })
       .then((db: SQLiteObject) => {
         this.databaseObj = db;
-        alert('Database'+this.database_name + ' Created!');
+        alert('Database' + this.database_name + ' Created!');
       })
       .catch(e => {
-        alert("error " + JSON.stringify(e));
+        alert('error ' + JSON.stringify(e));
       });
+
   }
 
   createTable() {
@@ -69,6 +80,43 @@ export class Tab1Page {
       });
   }
 
+  getPuffs() {
+    this.databaseObj.executeSql('SELECT SUM(puffn) AS \'somma\' FROM ' + this.table_name +' WHERE DATE(created_at) = date(\'now\')', [])
+      .then((res) => {
+       // alert(res.toSource());
+       if (res.rows.length > 0) {
+        for (let i = 0; i < res.rows.length; i++) {
+          // tslint:disable-next-line:forin
+          // tslint:disable-next-line:forin
+          this.tot_puffs = res.rows.item(i).somma;
+        }
+      }
+       this.total_day_puffs = this.tot_puffs;
+      alert(this.total_day_puffs);
+      })
+      .catch(e => {
+        alert('error ' + JSON.stringify(e));
+      });
+  }
+
+  resetPuffs() {
+    this.databaseObj.executeSql('SELECT MAX(created_at) AS \'last\' FROM ' + this.table_name, [])
+    .then((res) => {
+     // alert(res.toSource());
+     if (res.rows.length > 0) {
+      for (let i = 0; i < res.rows.length; i++) {
+        // tslint:disable-next-line:forin
+        // tslint:disable-next-line:forin
+        alert(res.rows.item(i).last);
+      }
+    }
+    this.total_day_puffs = 0;
+
+  });
+  }
+
+  // EXAMPLES
+
   insertRow() {
     if (!this.name_model.length) {
       alert('Enter Name');
@@ -81,30 +129,7 @@ export class Tab1Page {
 
       })
       .catch(e => {
-        alert('error ' + JSON.stringify(e))
-      });
-  }
-
-  getPuffs() {
-    this.databaseObj.executeSql('SELECT SUM(puffn) FROM ' + this.table_name, [])
-      .then((res) => {
-       // alert(res.toSource());
-       if (res.rows.length > 0) {
-        for (let i = 0; i < res.rows.length; i++) {
-          alert(res.rows.item(i).values);
-          // tslint:disable-next-line:forin
-          for (let key in res.rows.item) {
-            alert(key);
-          }
-          this.tot_puffs = res.rows.item(i) + 1;
-        }
-      }
-       this.total_day_puffs = this.tot_puffs;
-       alert(this.total_day_puffs);
-
-      })
-      .catch(e => {
-        alert('error ' + JSON.stringify(e))
+        alert('error ' + JSON.stringify(e));
       });
   }
 
@@ -119,8 +144,11 @@ export class Tab1Page {
         }
       })
       .catch(e => {
-        alert('error ' + JSON.stringify(e))
+        alert('error ' + JSON.stringify(e));
       });
+
+      this.lastDay();
+
   }
 
   deleteRow(item) {
@@ -130,11 +158,27 @@ export class Tab1Page {
         this.getRows();
       })
       .catch(e => {
-        alert('error ' + JSON.stringify(e))
+        alert('error ' + JSON.stringify(e));
       });
   }
 
   myFunctionFra($event: any){
     console.log('ciao');
   }
+
+  lastDay(){
+    this.databaseObj.executeSql('SELECT DATE(created_at) AS \'datanow\' FROM ' + this.table_name, [])
+    .then((res) => {
+      if (res.rows.length > 0) {
+        for (var i = 0; i < res.rows.length; i++) {
+          alert(res.rows.item(i).datanow);
+        }
+      }
+    })
+    .catch(e => {
+      alert('error ' + JSON.stringify(e));
+    });
+  }
 }
+
+  
