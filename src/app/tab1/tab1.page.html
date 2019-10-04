@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      Tab One
+      Quit Vaping!
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -10,31 +10,15 @@
     <ion-card class="welcome-card">
       <img src="/assets/shapes.svg" alt="" />
       <ion-card-header>
-        <ion-card-subtitle>Get Started</ion-card-subtitle>
-        <ion-card-title>Welcome to Ionic</ion-card-title>
+        <ion-card-title>Add every puff!</ion-card-title>
       </ion-card-header>
-      <ion-card-content>
-        <p>Add every puff!</p>
-      
+      <ion-card-content style="text-align: center;">
+
         <div class="circle" tappable (click)="insertPuff()">{{total_day_puffs}}</div>
       </ion-card-content>
     </ion-card>
    
-    <ion-button expand="block" (click)="resetPuffs()">
-      Reset Puffs
-    </ion-button>
 
-    <ion-button expand="block" (click)="createDB()">
-      Create DataBase
-    </ion-button>
-   
-    <ion-button expand="block" (click)="createTable()">
-      Create Table
-    </ion-button>
-   
-    <ion-button expand="block" (click)="getRows()">
-      Get Rows
-    </ion-button>
    
    
     <ion-item-divider>
