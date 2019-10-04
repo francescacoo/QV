@@ -10,9 +10,6 @@ import { Platform } from '@ionic/angular';
   styleUrls: ['tab1.page.scss']
 })
 export class Tab1Page {
-
-
-
   databaseObj: SQLiteObject; // Database instance object
   name_model:string = ""; // Input field model
   row_data: any = []; // Table rows
@@ -30,15 +27,9 @@ export class Tab1Page {
   ) {
     this.platform.ready().then(() => {
       this.createDB();
-    }).then(()=>{
-      this.getPuffs();
-
     }).catch(error => {
       console.log(error);
     });
-
-
-
 
   }
 
@@ -49,7 +40,9 @@ export class Tab1Page {
     })
       .then((db: SQLiteObject) => {
         this.databaseObj = db;
-        alert('Database' + this.database_name + ' Created!');
+   //     alert('Database' + this.database_name + ' Created!');
+   this.createTable();
+   this.getPuffs();
       })
       .catch(e => {
         alert('error ' + JSON.stringify(e));
@@ -61,7 +54,7 @@ export class Tab1Page {
     // tslint:disable-next-line:max-line-length
     this.databaseObj.executeSql('CREATE TABLE IF NOT EXISTS ' + this.table_name + ' (pid INTEGER PRIMARY KEY, puffn INTEGER, created_at DEFAULT CURRENT_TIMESTAMP)', [])
       .then(() => {
-        alert('Table Created!');
+    //    alert('Table Created!');
       })
       .catch(e => {
         alert('error ' + JSON.stringify(e));
@@ -71,7 +64,7 @@ export class Tab1Page {
   insertPuff() {
     this.databaseObj.executeSql('INSERT INTO ' + this.table_name + ' (puffn) VALUES (1)', [])
       .then(() => {
-        alert('Row puffs Inserted!');
+    //    alert('Row puffs Inserted!');
         this.getPuffs();
 
       })
@@ -92,7 +85,7 @@ export class Tab1Page {
         }
       }
        this.total_day_puffs = this.tot_puffs;
-      alert(this.total_day_puffs);
+ //     alert(this.total_day_puffs);
       })
       .catch(e => {
         alert('error ' + JSON.stringify(e));
