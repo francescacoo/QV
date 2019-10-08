@@ -1,5 +1,7 @@
 {
   "name": "quitvaping",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }
