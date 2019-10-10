@@ -23,7 +23,7 @@ import { SQLite } from '@ionic-native/sqlite/ngx';
   providers: [
     StatusBar,
     SplashScreen,
-    SQLite
+    SQLite,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

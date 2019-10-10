@@ -11,13 +11,24 @@
 
 <ion-content>
   <ion-card class="welcome-card">
-    <img src="/assets/shapes.svg" alt="" />
     <ion-card-header>
       <ion-card-title>Add every puff!</ion-card-title>
     </ion-card-header>
-    <ion-card-content style="text-align: center;">
+    <ion-card-content>
 
-      <div class="circle" tappable (click)="insertPuff()">{{total_day_puffs}}</div>
+      <ion-row>
+        <ion-col col-4></ion-col>
+        <ion-col col-4>
+          <div class="circle" tappable (click)="insertPuff()">{{total_day_puffs}}</div>
+      <ion-input placeholder="Enter number" [(ngModel)]="manual_puff"></ion-input>
+      <ion-button expand="block" (click)="insertPuffManually()">
+        Insert manually
+      </ion-button>
+        </ion-col>
+        <ion-col col-4></ion-col>
+      </ion-row>
+
+
     </ion-card-content>
   </ion-card>
  
@@ -25,10 +36,7 @@
  
  
   <ion-item-divider>
-    <ion-input placeholder="Enter Name" [(ngModel)]="name_model"></ion-input>
-    <ion-button expand="block" (click)="insertRow()">
-      Insert Row
-    </ion-button>
+blah
   </ion-item-divider>
  
  

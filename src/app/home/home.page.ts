@@ -20,6 +20,7 @@ export class HomePage {
 
   today = Date.now();
   lastLoggedDay: any;
+  manual_puff: any;
 
   constructor(
     private platform: Platform,
@@ -61,6 +62,7 @@ export class HomePage {
       });
   }
 
+  // from the circle button
   insertPuff() {
     this.databaseObj.executeSql('INSERT INTO ' + this.table_name + ' (puffn) VALUES (1)', [])
       .then(() => {
@@ -70,6 +72,23 @@ export class HomePage {
       })
       .catch(e => {
         alert('error ' + JSON.stringify(e))
+      });
+  }
+
+  // insert puff manually
+  insertPuffManually() {
+    if (!this.manual_puff.length) {
+      alert('Enter number');
+      return;
+    }
+    this.databaseObj.executeSql('INSERT INTO ' + this.table_name + ' (puffn) VALUES ("' + this.manual_puff + '")', [])
+      .then(() => {
+        alert('Row manual Inserted!');
+        this.getPuffs();
+
+      })
+      .catch(e => {
+        alert('error ' + JSON.stringify(e));
       });
   }
 
@@ -108,23 +127,7 @@ export class HomePage {
   });
   }
 
-  // EXAMPLES
 
-  insertRow() {
-    if (!this.name_model.length) {
-      alert('Enter Name');
-      return;
-    }
-    this.databaseObj.executeSql('INSERT INTO ' + this.table_name + ' (puffn) VALUES ("' + this.name_model + '")', [])
-      .then(() => {
-        alert('Row Inserted!');
-        this.getPuffs();
-
-      })
-      .catch(e => {
-        alert('error ' + JSON.stringify(e));
-      });
-  }
 
   getRows() {
     this.databaseObj.executeSql("SELECT * FROM " + this.table_name, [])
