@@ -10,5 +10,26 @@
 </ion-header>
 
 <ion-content>
+  ciao
 {{total_day_puffs_yesterday}}
+
+<ion-button (click)="createPlan1()">create plan</ion-button>
+
+<ion-grid>
+    <ion-row>
+      <ion-col size="3" *ngFor="let plan_day of plan_days; index as i">
+       
+                day{{i}}
+            
+            <p>
+                
+                {{plan_day}} puffs
+            </p>
+          
+      </ion-col>
+    </ion-row> 
+</ion-grid>
+
+
+
 </ion-content>
