@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite/ngx';
 import { Platform } from '@ionic/angular';
 
@@ -7,7 +7,7 @@ import { Platform } from '@ionic/angular';
   templateUrl: './goal.page.html',
   styleUrls: ['./goal.page.scss'],
 })
-export class GoalPage implements OnInit {
+export class GoalPage {
 
   databaseObj: SQLiteObject; // Database instance object
   name_model:string = ""; // Input field model
@@ -21,38 +21,53 @@ export class GoalPage implements OnInit {
   lastLoggedDay: any;
   manual_puff: any;
 
-  constructor(   private platform: Platform,
+  constructor(   
+    private platform: Platform,
     private sqlite: SQLite) { 
+      this.platform.ready().then(() => {
+        this.createDB();
+      }).catch(error => {
+        console.log(error);
+      });
+  
     
   }
-
-  ngOnInit() {
-    // select the total puffs of day before
-    this.databaseObj.executeSql('SELECT SUM(puffn) AS \'somma\' FROM ' + this.table_name +' WHERE DATE(created_at) = DATEADD(day, -1, convert(date, GETDATE()))', [])
-    .then((res) => {
-     // alert(res.toSource());
-     if (res.rows.length > 0) {
-      for (let i = 0; i < res.rows.length; i++) {
-        // tslint:disable-next-line:forin
-        // tslint:disable-next-line:forin
-        this.tot_puffs_yesterday = res.rows.item(i).somma;
-      }
-    }
-     this.total_day_puffs_yesterday = this.tot_puffs_yesterday; 
-     alert(this.total_day_puffs_yesterday);
+  createDB() {
+    this.sqlite.create({
+      name: this.database_name,
+      location: 'default'
     })
-    .catch(e => {
-      alert('error ' + JSON.stringify(e));
-    });
+      .then((db: SQLiteObject) => {
+        this.databaseObj = db;
+   //     alert('Database' + this.database_name + ' Created!');
 
+      })
+      .catch(e => {
+        alert('error ' + JSON.stringify(e));
+      });
 
+      this.getLastDayPuffs();
   }
 
-
-
- 
-
-  
-
+  getLastDayPuffs(){
+    alert("I call it");
+   // select the total puffs of day before
+   this.databaseObj.executeSql('SELECT SUM(puffn) AS \'somma\' FROM ' + this.table_name +' WHERE DATE(created_at) = DATEADD(day, -1, convert(date, GETDATE()))', [])
+   .then((res) => {
+    // alert(res.toSource());
+    if (res.rows.length > 0) {
+     for (let i = 0; i < res.rows.length; i++) {
+       // tslint:disable-next-line:forin
+       // tslint:disable-next-line:forin
+       this.tot_puffs_yesterday = res.rows.item(i).somma;
+     }
+   }
+    this.total_day_puffs_yesterday = this.tot_puffs_yesterday; 
+    alert(this.total_day_puffs_yesterday);
+   })
+   .catch(e => {
+     alert('error ' + JSON.stringify(e));
+   });
+  }
 
 }
