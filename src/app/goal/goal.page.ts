@@ -138,26 +138,41 @@ var nextdate2="";
   
 }
 
+insertquery(value1,value2){
+
+  this.databaseObj.executeSql('INSERT INTO quitplan (puffn, day) VALUES ("'+value1+'","'+value2+'")',[])
+  .then(() => {
+    alert('Row puffs Inserted!');
+
+  })
+  .catch(e => {
+    alert('error ' + JSON.stringify(e))
+  });
+}
+
 saveplan(){
 
       // tslint:disable-next-line:max-line-length
-      this.databaseObj.executeSql('CREATE TABLE IF NOT EXISTS quitplan (pid INTEGER PRIMARY KEY, puffn INTEGER, day TEXT, reached INTEGER )', [])
+      this.databaseObj.executeSql('CREATE TABLE IF NOT EXISTS quitplan (pid INTEGER PRIMARY KEY, puffn INTEGER, day TEXT)', [])
       .then(() => {
          alert('Table plan Created!');
+
+      this.databaseObj.executeSql('INSERT INTO quitplan (puffn, day) VALUES ("test","test")', [])
+    
+         .then(() => {
+           alert('Row puffs Inserted!');
+   
+         })
+         .catch(e => {
+           alert('error ' + JSON.stringify(e))
+         });
+        
 
          for(var a=0; a<this.calendar_quit.length; a++){
         //  alert(a);
 
-          this.databaseObj.executeSql('INSERT INTO ' + this.table_name + ' (puffn, day) VALUES ('+this.calendar_quit[a].puffn+','+this.calendar_quit[a].puffn+');')
+          this.insertquery(this.calendar_quit[a].puffn,this.calendar_quit[a].puffn);
     
-          .then(() => {
-            alert('Row puffs Inserted!');
-    
-          })
-          .catch(e => {
-            alert('error ' + JSON.stringify(e))
-          });
-         
         }
 
 
