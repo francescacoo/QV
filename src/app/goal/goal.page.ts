@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef  } from '@angular/core';
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite/ngx';
 import { Platform } from '@ionic/angular';
+import { DatePipe } from '@angular/common';
+
 
 @Component({
   selector: 'app-goal',
@@ -22,9 +24,11 @@ export class GoalPage {
   today = Date.now();
   lastLoggedDay: any;
   manual_puff: any;
+  rangevalue: any;
 
   constructor(   
     private platform: Platform,
+    private CD: ChangeDetectorRef,
     private sqlite: SQLite) { 
       this.platform.ready().then(() => {
         this.createDB();
@@ -81,29 +85,57 @@ this.databaseObj.executeSql('SELECT SUM(puffn) AS \'somma\' FROM ' + this.table_
     });
   }
 
-// quit in 10 days
-createPlan1(){
-  // divide the current daily puffs by 10 (on one day or more days and do average)
-  this.stepdown = this.total_day_puffs_yesterday/10;
-  var i=0;
-  var floatingPointPart = (this.total_day_puffs_yesterday/10) % 1;
-  var newtotalpuffs = this.total_day_puffs_yesterday;
-  if(floatingPointPart==0){
-    for(i=0;i<10;i++){
-     // alert("inside for");
-      this.plan_days[i]=newtotalpuffs - (this.stepdown);
-      newtotalpuffs= newtotalpuffs-(this.stepdown);
-    //  alert(this.plan_days[i]);
-    }
+  changerange($event: any){
+    this.rangevalue=$event.detail.value;
+    this.createPlan1(this.rangevalue);
   }
 
 
+// quit in 10 days
+createPlan1(selecteddays){
 
-var integerPart = Math.round(this.total_day_puffs_yesterday/10);
 
-//  alert(floatingPointPart);
-//  alert(integerPart);
+this.plan_days =[];
+ // alert(selecteddays);
 
+ 
+
+ // divide the current daily puffs by 10 (on one day or more days and do average)
+  //this.stepdown = this.total_day_puffs_yesterday/selecteddays;
+  var i=0;
+  var integerPart = Math.round(this.total_day_puffs_yesterday/selecteddays);
+
+
+  //alert(integerPart);
+
+  var newtotalpuffs = this.total_day_puffs_yesterday;
+    for(i=1;i<=selecteddays;i++){
+     // alert("inside for");
+
+     this.plan_days[i]=new Date();
+     this.plan_days[i]=this.plan_days[i].setDate(this.plan_days[i].getDate()+i);
+     alert(this.plan_days[i]);
+
+     this.plan_days[i]=newtotalpuffs - (integerPart);
+     newtotalpuffs= newtotalpuffs-(integerPart);
+      integerPart=Math.round(newtotalpuffs/(selecteddays-i));
+ 
+
+    /*  if(floatingPointPart==0){
+      this.plan_days[i]=newtotalpuffs - (integerPart);
+      newtotalpuffs= newtotalpuffs-(integerPart);
+      }
+*/
+    
+
+      }
+
+    //  alert(integerPart);
+      // to force ngfor to update
+      this.CD.detectChanges();
+   //   alert(this.plan_days[i]);
+    
+  
 }
 
 // quit in 15 days

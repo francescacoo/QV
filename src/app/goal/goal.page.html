@@ -10,15 +10,23 @@
 </ion-header>
 
 <ion-content>
-  ciao
+  Average puffs buff:
 {{total_day_puffs_yesterday}}
 
-<ion-button (click)="createPlan1()">create plan</ion-button>
+<ion-button (click)="saveplan()">SAVE PLAN</ion-button>
+
+
+<ion-item>
+  <ion-range min="1" max="120" step="2" snaps="true" ticks="true" color="secondary" (ionChange)="changerange($event)"></ion-range>
+  {{rangevalue}}
+  {{integerPart}}
+</ion-item>
 
 <ion-grid>
     <ion-row>
-      <ion-col size="3" *ngFor="let plan_day of plan_days; index as i">
-       
+      <ion-col size="3" *ngFor="let plan_day of plan_days | slice:1; let even = even; let odd = odd; index as i; " [ngClass]="{ odd: odd, even: even }">
+   
+
                 day{{i}}
             
             <p>
@@ -29,6 +37,8 @@
       </ion-col>
     </ion-row> 
 </ion-grid>
+<ion-button (click)="saveplan()">SAVE PLAN</ion-button>
+
 
 
 
