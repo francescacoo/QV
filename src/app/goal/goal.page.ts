@@ -20,6 +20,7 @@ export class GoalPage {
   total_day_puffs_yesterday: number;
   stepdown: number;
   plan_days: any=[];
+  calendar_quit: any =[];
 
   today = Date.now();
   lastLoggedDay: any;
@@ -96,39 +97,38 @@ createPlan1(selecteddays){
 
 
 this.plan_days =[];
- // alert(selecteddays);
 
- 
+this.calendar_quit=[];
 
- // divide the current daily puffs by 10 (on one day or more days and do average)
-  //this.stepdown = this.total_day_puffs_yesterday/selecteddays;
+var today = new Date();
+var nextdate = new Date(today.getFullYear(),today.getMonth(),today.getDate()+9);
+var nextdate2="";
+
+
   var i=0;
   var integerPart = Math.round(this.total_day_puffs_yesterday/selecteddays);
 
 
-  //alert(integerPart);
-
   var newtotalpuffs = this.total_day_puffs_yesterday;
-    for(i=1;i<=selecteddays;i++){
-     // alert("inside for");
+  for(i=0;i<selecteddays;i++){
 
-     this.plan_days[i]=new Date();
-     this.plan_days[i]=this.plan_days[i].setDate(this.plan_days[i].getDate()+i);
-     alert(this.plan_days[i]);
 
-     this.plan_days[i]=newtotalpuffs - (integerPart);
-     newtotalpuffs= newtotalpuffs-(integerPart);
-      integerPart=Math.round(newtotalpuffs/(selecteddays-i));
- 
+    nextdate=new Date(today.getFullYear(),today.getMonth(),today.getDate()+i);
 
-    /*  if(floatingPointPart==0){
-      this.plan_days[i]=newtotalpuffs - (integerPart);
-      newtotalpuffs= newtotalpuffs-(integerPart);
-      }
-*/
+    nextdate2=nextdate.getUTCDate() + "/"+ (nextdate.getUTCMonth() + 1);
+    this.calendar_quit.push({"puffs": newtotalpuffs - (integerPart), "date":nextdate2});
     
 
-      }
+  //  alert(this.calendar_quit[0].puffs);
+
+   // this.plan_days[i]=newtotalpuffs - (integerPart);
+    newtotalpuffs= newtotalpuffs-(integerPart);
+    integerPart=Math.round(newtotalpuffs/(selecteddays-i));
+ 
+    //alert(this.plan_days[i].puffs);
+    
+
+    }
 
     //  alert(integerPart);
       // to force ngfor to update
@@ -138,13 +138,37 @@ this.plan_days =[];
   
 }
 
-// quit in 15 days
-createPlan2(){}
+saveplan(){
 
-// quit in 30 days
-createPlan3(){}
+      // tslint:disable-next-line:max-line-length
+      this.databaseObj.executeSql('CREATE TABLE IF NOT EXISTS quitplan (pid INTEGER PRIMARY KEY, puffn INTEGER, day TEXT, reached INTEGER )', [])
+      .then(() => {
+         alert('Table plan Created!');
 
-//custom plan
+         for(var a=0; a<this.calendar_quit.length; a++){
+        //  alert(a);
+
+          this.databaseObj.executeSql('INSERT INTO ' + this.table_name + ' (puffn, day) VALUES ('+this.calendar_quit[a].puffn+','+this.calendar_quit[a].puffn+');')
+    
+          .then(() => {
+            alert('Row puffs Inserted!');
+    
+          })
+          .catch(e => {
+            alert('error ' + JSON.stringify(e))
+          });
+         
+        }
 
 
+
+
+      })
+      .catch(e => {
+        alert('error ' + JSON.stringify(e));
+      });
+
+   
+
+}
 }
