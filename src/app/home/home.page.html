@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="secondary">
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
@@ -19,16 +19,17 @@
       <ion-row>
         <ion-col col-4></ion-col>
         <ion-col col-4>
-          <div class="circle" tappable (click)="insertPuff()">{{total_day_puffs}}</div>
-      <ion-input placeholder="Enter number" [(ngModel)]="manual_puff"></ion-input>
-      <ion-button expand="block" (click)="insertPuffManually()">
-        Insert manually
-      </ion-button>
+          <div class="circle" tappable (click)="insertPuff()">{{total_day_puffs}}/{{row_todayGoal}}
+            </div>
+    
         </ion-col>
-        <ion-col col-4></ion-col>
+        <ion-col col-4> 
+    </ion-col>
       </ion-row>
-
-
+      <ion-input placeholder="Enter number" [(ngModel)]="manual_puff"></ion-input>
+      <ion-button expand="block" color="secondary" (click)="insertPuffManually()">
+          Insert manually
+        </ion-button>
     </ion-card-content>
   </ion-card>
  
@@ -36,7 +37,7 @@
  
  
   <ion-item-divider>
-blah
+
   </ion-item-divider>
  
  

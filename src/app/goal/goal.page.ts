@@ -119,18 +119,15 @@ var nextdate2="";
     this.calendar_quit.push({"puffs": newtotalpuffs - (integerPart), "date":nextdate2});
     
 
-  //  alert(this.calendar_quit[0].puffs);
+   // alert(this.calendar_quit[0].puffs);
 
    // this.plan_days[i]=newtotalpuffs - (integerPart);
     newtotalpuffs= newtotalpuffs-(integerPart);
     integerPart=Math.round(newtotalpuffs/(selecteddays-i));
  
     //alert(this.plan_days[i].puffs);
-    
-
     }
 
-    //  alert(integerPart);
       // to force ngfor to update
       this.CD.detectChanges();
    //   alert(this.plan_days[i]);
@@ -142,7 +139,7 @@ insertquery(value1,value2){
 
   this.databaseObj.executeSql('INSERT INTO quitplan (puffn, day) VALUES ("'+value1+'","'+value2+'")',[])
   .then(() => {
-    alert('Row puffs Inserted!');
+ //   alert('Row puffs Inserted!');
 
   })
   .catch(e => {
@@ -155,27 +152,15 @@ saveplan(){
       // tslint:disable-next-line:max-line-length
       this.databaseObj.executeSql('CREATE TABLE IF NOT EXISTS quitplan (pid INTEGER PRIMARY KEY, puffn INTEGER, day TEXT)', [])
       .then(() => {
-         alert('Table plan Created!');
-
-      this.databaseObj.executeSql('INSERT INTO quitplan (puffn, day) VALUES ("test","test")', [])
-    
-         .then(() => {
-           alert('Row puffs Inserted!');
    
-         })
-         .catch(e => {
-           alert('error ' + JSON.stringify(e))
-         });
-        
 
          for(var a=0; a<this.calendar_quit.length; a++){
-        //  alert(a);
-
-          this.insertquery(this.calendar_quit[a].puffn,this.calendar_quit[a].puffn);
+   
+          this.insertquery(this.calendar_quit[a].puffs,this.calendar_quit[a].date);
     
         }
 
-
+alert("Plan saved!");
 
 
       })
@@ -185,5 +170,31 @@ saveplan(){
 
    
 
+}
+
+viewPlan(){
+  this.databaseObj.executeSql("SELECT * FROM quitplan", [])
+  .then((res) => {
+    this.row_data = [];
+    if (res.rows.length > 0) {
+      for (var i = 0; i < res.rows.length; i++) {
+        this.row_data.push(res.rows.item(i));
+        
+      }
+    }
+  })
+  .catch(e => {
+    alert('error ' + JSON.stringify(e));
+  });
+}
+
+deleteRow(item) {
+  this.databaseObj.executeSql("DELETE FROM quitplan", [])
+    .then((res) => {
+      alert("Row Deleted!");
+    })
+    .catch(e => {
+      alert('error ' + JSON.stringify(e));
+    });
 }
 }

@@ -18,9 +18,13 @@ export class HomePage {
   tot_puffs: number;
   total_day_puffs: number;
 
-  today = Date.now();
+  today : any;
   lastLoggedDay: any;
   manual_puff: any;
+  today_day: any;
+  today_month: any;
+  row_todayGoal: any[];
+  todayGoal: string;
 
   constructor(
     private platform: Platform,
@@ -104,8 +108,8 @@ export class HomePage {
         }
       }
        this.total_day_puffs = this.tot_puffs;
- //     alert(this.total_day_puffs);
-      })
+       this.getTodayGoal();
+           })
       .catch(e => {
         alert('error ' + JSON.stringify(e));
       });
@@ -174,5 +178,38 @@ export class HomePage {
     .catch(e => {
       alert('error ' + JSON.stringify(e));
     });
+  }
+
+
+  getTodayGoal(){
+    this.today=new Date;
+
+
+    this.today_day=this.today.getDate();
+    this.today_month=this.today.getMonth()+1;
+
+    var data=this.today_day+"/"+this.today_month;
+
+ 
+
+      this.databaseObj.executeSql("SELECT puffn AS 'puffn' FROM quitplan WHERE day='"+data+"' ORDER BY pid DESC LIMIT 1", [])
+    .then((res) => {
+      this.row_todayGoal = [];
+      if (res.rows.length > 0) {
+        for (var i = 0; i < res.rows.length; i++) {
+          this.row_todayGoal.push(res.rows.item(i).puffn);
+         // alert(this.row_data.item(i).puffn);
+        }
+        return this.row_todayGoal;
+      }
+    })
+    .catch(e => {
+      alert('error ' + JSON.stringify(e));
+    });
+
+
+
+  
+    
   }
 }
